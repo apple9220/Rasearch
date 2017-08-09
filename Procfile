@@ -1,1 +1,1 @@
-web: node keystone.js
+web: sudo apt-get install -y nodejs
