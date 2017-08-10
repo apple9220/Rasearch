@@ -13,7 +13,7 @@
         $('#alert').show();
 
         evt.preventDefault();
-        var data = { pageCnt: $('#page_cnt').val() };
+        var data = { id : 3};
         $.ajax({
             type: "POST",
             url: '/scrapeCSV',

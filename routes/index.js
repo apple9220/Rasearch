@@ -39,11 +39,9 @@ exports = module.exports = function(app) {
 
     // Scrape URL
     app.post('/scrapeCSV', function(req, res) {
-        var pageCnt = req.body.pageCnt;
         crawl.crawlAndSaveToCSV(
             'https://nvsos.gov/sosentitysearch/RACorps.aspx?fsnain=OQ%252fy6HT6QrwXv%252fzlehtQZw%253d%253d&RAName=INCORP+SERVICES%2c+INC.',
-            'public/csv/data.csv',
-            pageCnt
+            'public/csv/data.csv'
         ).then(() => {
             res.send(JSON.stringify("Scrapping Success!"));
         }).catch((error) => {
