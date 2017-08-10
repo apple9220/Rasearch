@@ -6,6 +6,9 @@
         // disable scrapping
         $('#scrape_csv').attr('disabled', 'disabled');
 
+        // hide download
+        $('#download_csv').hide();
+
         // show alert
         $('#alert').show();
 
@@ -19,6 +22,9 @@
             success: function(response) {
                 // enable scrapping
                 $('#scrape_csv').removeAttr('disabled');
+
+                // show download
+                $('#download_csv').show();
 
                 // show alert
                 $('#alert').hide();

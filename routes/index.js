@@ -42,7 +42,7 @@ exports = module.exports = function(app) {
         var pageCnt = req.body.pageCnt;
         crawl.crawlAndSaveToCSV(
             'https://nvsos.gov/sosentitysearch/RACorps.aspx?fsnain=OQ%252fy6HT6QrwXv%252fzlehtQZw%253d%253d&RAName=INCORP+SERVICES%2c+INC.',
-            'csv/data.csv',
+            'public/csv/data.csv',
             pageCnt
         ).then(() => {
             res.send(JSON.stringify("Scrapping Success!"));
