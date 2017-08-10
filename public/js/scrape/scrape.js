@@ -7,7 +7,7 @@
         $('#scrape_csv').attr('disabled', 'disabled');
 
         // hide download
-        $('#download_csv').hide();
+        //$('#download_csv').hide();
 
         // show alert
         $('#alert').show();
@@ -25,7 +25,7 @@
                 $('#scrape_csv').removeAttr('disabled');
 
                 // show download
-                $('#download_csv').show();
+                //$('#download_csv').show();
 
                 // show alert
                 $('#alert').hide();
