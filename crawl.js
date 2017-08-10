@@ -31,6 +31,7 @@ async function retry(asyncFn, retries = 5, {
       error = e
       // Ignored
     }
+
     await Promise.delay(timeout * (factor ** tries++))
   }
 
@@ -310,15 +311,15 @@ async function crawlAndSaveToCSV(url, filepath, pagesLimit) {
 }
 
 // This just for testing:
-// crawlAndSaveToCSV(
-//   'https://nvsos.gov/sosentitysearch/RACorps.aspx?fsnain=OQ%252fy6HT6QrwXv%252fzlehtQZw%253d%253d&RAName=INCORP+SERVICES%2c+INC.',
-//   'test.csv',
-//   10
-// ).then(() => {
-//   console.log('SUCCESS')
-// }).catch((error) => {
-//   console.log('ERROR', error)
-// })
+crawlAndSaveToCSV(
+  'https://nvsos.gov/sosentitysearch/RACorps.aspx?fsnain=OQ%252fy6HT6QrwXv%252fzlehtQZw%253d%253d&RAName=INCORP+SERVICES%2c+INC.',
+  'test.csv',
+  10
+).then(() => {
+  console.log('SUCCESS')
+}).catch((error) => {
+  console.log('ERROR', error)
+})
 
 exports.crawlUrls = crawlUrls
 exports.crawlInfo = crawlInfo

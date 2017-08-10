@@ -18,6 +18,7 @@
             type: "POST",
             url: '/scrapeCSV',
             data: data,
+            aysnc: false,
             dataType: 'json',
             success: function(response) {
                 // enable scrapping
