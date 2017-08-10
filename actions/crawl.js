@@ -3,7 +3,7 @@ const Promise = require('bluebird')
 const superagent = require('superagent')
 const cheerio = require('cheerio')
 const json2csv = require('json2csv')
-
+const async = require('async')
 
 const CONCURRENCY = 20
 const DELAY = 0
