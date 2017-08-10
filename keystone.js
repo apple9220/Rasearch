@@ -31,6 +31,7 @@ keystone.init({
 	'auto update': true,
 	'session': true,
 	'auth': true,
+	'cookie secret': 'apple&9220',
 	'user model': 'N',
 });
 
