@@ -66,7 +66,7 @@ exports = module.exports = function(app) {
 
     // Export CSV
     app.post('/exportCSV', function(req, res) {
-        
+        console.log(CORINFOS.length);
         crawl.exportCSV(CORINFOS).then((response) => {
             res.send(JSON.stringify("Scrapping Success!"));
         }).catch((error) => {
