@@ -40,7 +40,8 @@ exports = module.exports = function(app) {
     app.get('/', routes.views.index);
 
     // Scrape URL
-    app.post('/scrapeURLS', function(req, res) {        
+    app.post('/scrapeURLS', function(req, res) {
+        CORINFOS = [];        
         savedPayload = req.body.savedPayload;
         readCnt = req.body.readCnt;
 

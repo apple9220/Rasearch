@@ -44,7 +44,7 @@
                 }
             });
 
-            //sleep(10);            
+            sleep(50);
         }   
     });
 
@@ -84,7 +84,11 @@
 
     $('#scrape_csv').on('click', function(evt) {
         if (SCRAPPING_STARTED == false)  {
-            SCRAPPING_STARTED = true;
+            
+            SCRAPPING_STARTED = true;            
+            SAVEDPAYLOAD = {};
+            READCNT = 0;
+            CORURLS = [];
 
             $('#scrape_csv').text('Scrapping...');
         }
