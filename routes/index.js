@@ -58,6 +58,7 @@ exports = module.exports = function(app) {
 
         crawl.crawlInfo(url).then((response) => {
             CORINFOS.push(response);
+            console.log(response);
             res.send(JSON.stringify("Get Info Success"));
         }).catch((error) => {
             res.send(JSON.stringify("Scrapping Failed!"));

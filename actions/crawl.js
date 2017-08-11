@@ -7,7 +7,7 @@ const json2csv = require('json2csv')
 
 const CONCURRENCY = 1
 const DELAY = 0
-const MAX_PAGES = 6//Infinity
+const MAX_PAGES = 2//Infinity
 const SELECTORS = {
   entriesLinks: '.entryform .TDColorC td:nth-child(1) > a',
   paginationLinks: '.entryform td[colspan="4"] > a',

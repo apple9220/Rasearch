@@ -119,7 +119,7 @@
                     
                 console.log(CORURLS.length);
                 console.log(CORURLS);
-                if (savedPayload != undefined && savedPayload != null && readCnt < 6) {
+                if (savedPayload != undefined && savedPayload != null && readCnt < 2) {
                     
                     reCallFunc();
                 } else {
