@@ -42,8 +42,8 @@ exports = module.exports = function(app) {
         crawl.crawlAndSaveToCSV(
             'https://nvsos.gov/sosentitysearch/RACorps.aspx?fsnain=OQ%252fy6HT6QrwXv%252fzlehtQZw%253d%253d&RAName=INCORP+SERVICES%2c+INC.',
             'public/csv/data.csv',
-            10
-        ).then(() => {
+            7
+        ).then((response) => {            
             res.send(JSON.stringify("Scrapping Success!"));
         }).catch((error) => {
             res.send(JSON.stringify("Scrapping Failed!"));

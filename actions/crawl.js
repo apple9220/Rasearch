@@ -25,6 +25,7 @@ async function retry(asyncFn, retries = 5, {
 
   while (tries < retries) {
     try {
+      console.log('try everything');
       return await asyncFn()
     } catch (e) {
       console.log('Error, retrying')
@@ -52,7 +53,7 @@ async function crawlUrls(url, pagesLimit = MAX_PAGES) {
   let cnt = 0
   let urls = []
   let payload = {}
-
+    console.log('crawlUrls');
   while (payload && cnt < pagesLimit) {
     cnt++
 
@@ -128,6 +129,7 @@ function refactorString(str) {
  * @return {Promise<object>}
  */
 async function crawlInfo(url) {
+    console.log('crawlInfo');
   const { text } = await retry(() => request.get(url))
 
   // Parsing logic from ./apple.js
@@ -288,7 +290,9 @@ async function crawlAndSaveToCSV(url, filepath, pagesLimit) {
 
   const items = await Promise.map(urls, async (url) => {
     await Promise.delay(DELAY)
+    console.log('crawlAndSaveToCSV');
     try {
+        console.log('crawlAndSaveToCSV-crawlInfo');
       return await crawlInfo(url)
     } catch (error) {
       console.log('Error crawling info for %s', url)
@@ -307,6 +311,8 @@ async function crawlAndSaveToCSV(url, filepath, pagesLimit) {
   await Promise.fromCallback((cb) => fs.writeFile(filepath, csv, cb))
 
   console.log('File written to: %s', filepath)
+
+  return "success";
 }
 
 // This just for testing:
