@@ -91,6 +91,8 @@
             $('#scrape_csv').text('Scrapping...');
         }
 
+        console.log('readCnt:= ' + READCNT);
+        
         evt.preventDefault();
 
         var data = { 

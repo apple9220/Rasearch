@@ -44,7 +44,7 @@ exports = module.exports = function(app) {
         CORINFOS = [];        
         savedPayload = req.body.savedPayload;
         readCnt = req.body.readCnt;
-
+        
         crawl.crawlUrls(URL, savedPayload, readCnt).then((response) => {
             res.send(JSON.stringify(response));
         }).catch((error) => {
