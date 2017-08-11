@@ -44,7 +44,7 @@
                 }
             });
 
-            sleep(50);
+            sleep(100);
         }   
     });
 
@@ -119,8 +119,7 @@
                     
                 console.log(CORURLS.length);
                 console.log(CORURLS);
-                if (savedPayload != undefined && savedPayload != null && readCnt < 2) {
-                    
+                if (savedPayload != undefined && savedPayload != null && readCnt < 2) {                    
                     reCallFunc();
                 } else {
                     $('#get_infos').trigger('click');
