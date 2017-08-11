@@ -27,6 +27,8 @@ var crawl = require('../actions/crawl');
 keystone.pre('routes', middleware.initLocals);
 keystone.pre('render', middleware.flashMessages);
 
+var URL = 'https://nvsos.gov/sosentitysearch/RACorps.aspx?fsnain=OQ%252fy6HT6QrwXv%252fzlehtQZw%253d%253d&RAName=INCORP+SERVICES%2c+INC.';
+var CORINFOS = [];
 // Import Route Controllers
 var routes = {
     views: importRoutes('./views'),
@@ -38,17 +40,38 @@ exports = module.exports = function(app) {
     app.get('/', routes.views.index);
 
     // Scrape URL
-    app.post('/scrapeCSV', function(req, res) {
-        crawl.crawlAndSaveToCSV(
-            'https://nvsos.gov/sosentitysearch/RACorps.aspx?fsnain=OQ%252fy6HT6QrwXv%252fzlehtQZw%253d%253d&RAName=INCORP+SERVICES%2c+INC.',
-            'public/csv/data.csv',
-            7
-        ).then((response) => {            
+    app.post('/scrapeURLS', function(req, res) {        
+        savedPayload = req.body.savedPayload;
+        readCnt = req.body.readCnt;
+
+        crawl.crawlUrls(URL, savedPayload, readCnt).then((response) => {
+            res.send(JSON.stringify(response));
+        }).catch((error) => {
+            res.send(JSON.stringify("Scrapping Failed!"));
+        })        
+    });
+
+    // Get Infos
+    app.post('/getInfos', function(req, res) {
+        url = req.body.url;
+
+        crawl.crawlInfo(url).then((response) => {
+            CORINFOS.push(response);
+            res.send(JSON.stringify("Get Info Success"));
+        }).catch((error) => {
+            res.send(JSON.stringify("Scrapping Failed!"));
+        })        
+    });    
+
+    // Export CSV
+    app.post('/exportCSV', function(req, res) {
+        
+        crawl.exportCSV(CORINFOS).then((response) => {
             res.send(JSON.stringify("Scrapping Success!"));
         }).catch((error) => {
             res.send(JSON.stringify("Scrapping Failed!"));
-        })
-    });
+        })        
+    });   
     // NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
     // app.get('/protected', middleware.requireUser, routes.views.protected);
 

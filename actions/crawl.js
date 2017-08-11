@@ -5,9 +5,9 @@ const cheerio = require('cheerio')
 const json2csv = require('json2csv')
 
 
-const CONCURRENCY = 20
+const CONCURRENCY = 1
 const DELAY = 0
-const MAX_PAGES = Infinity
+const MAX_PAGES = 6//Infinity
 const SELECTORS = {
   entriesLinks: '.entryform .TDColorC td:nth-child(1) > a',
   paginationLinks: '.entryform td[colspan="4"] > a',
@@ -25,7 +25,6 @@ async function retry(asyncFn, retries = 5, {
 
   while (tries < retries) {
     try {
-      console.log('try everything');
       return await asyncFn()
     } catch (e) {
       console.log('Error, retrying')
@@ -49,14 +48,17 @@ async function retry(asyncFn, retries = 5, {
  * @param  {number} pagesLimit maximum number of pages to follow
  * @return {Promise<string[]>} Promise that resolves to corp urls
  */
-async function crawlUrls(url, pagesLimit = MAX_PAGES) {
+async function crawlUrls(url, savedPayload, readCnt) {
   let cnt = 0
   let urls = []
-  let payload = {}
-    console.log('crawlUrls');
-  while (payload && cnt < pagesLimit) {
+  let payload = savedPayload
+  if (readCnt == 0)
+    payload = {}
+  
+  while (payload && cnt < 5 && readCnt < MAX_PAGES) {
     cnt++
-
+    readCnt++;    
+    console.log('readCnt:= ' + readCnt);
     // In case there will be rate limiting on the server
     await Promise.delay(DELAY)
 
@@ -109,8 +111,14 @@ async function crawlUrls(url, pagesLimit = MAX_PAGES) {
       payload = null
     }
   }
+  
+  console.log(urls);
 
-  return urls.map(url => `https://nvsos.gov/sosentitysearch/${url}`)
+  return {
+      urls: urls.map(url => `https://nvsos.gov/sosentitysearch/${url}`),
+      readCnt: readCnt,
+      payload: payload
+  }
 }
 
 // Refactor String Function
@@ -128,8 +136,7 @@ function refactorString(str) {
  * @param  {string} url 
  * @return {Promise<object>}
  */
-async function crawlInfo(url) {
-    console.log('crawlInfo');
+async function crawlInfo(url) {    
   const { text } = await retry(() => request.get(url))
 
   // Parsing logic from ./apple.js
@@ -283,6 +290,16 @@ const FIELDS = [
   'Officer 10 Address',
   'Direct URL',
 ]
+
+async function exportCSV(infos) {
+    const csv = json2csv({
+        data: infos.filter(i => !!i),
+        fields: FIELDS,
+    })
+
+    await Promise.fromCallback((cb) => fs.writeFile("public/csv/data.csv", csv, cb))
+}
+
 async function crawlAndSaveToCSV(url, filepath, pagesLimit) {
   const urls = await crawlUrls(url, pagesLimit)
 
@@ -290,9 +307,8 @@ async function crawlAndSaveToCSV(url, filepath, pagesLimit) {
 
   const items = await Promise.map(urls, async (url) => {
     await Promise.delay(DELAY)
-    console.log('crawlAndSaveToCSV');
-    try {
-        console.log('crawlAndSaveToCSV-crawlInfo');
+    
+    try {        
       return await crawlInfo(url)
     } catch (error) {
       console.log('Error crawling info for %s', url)
@@ -329,3 +345,4 @@ async function crawlAndSaveToCSV(url, filepath, pagesLimit) {
 exports.crawlUrls = crawlUrls
 exports.crawlInfo = crawlInfo
 exports.crawlAndSaveToCSV = crawlAndSaveToCSV
+exports.exportCSV = exportCSV
