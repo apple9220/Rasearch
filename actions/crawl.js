@@ -7,7 +7,7 @@ const json2csv = require('json2csv')
 
 const CONCURRENCY = 1
 const DELAY = 0
-const MAX_PAGES = 6//Infinity
+const MAX_PAGES = Infinity
 const SELECTORS = {
   entriesLinks: '.entryform .TDColorC td:nth-child(1) > a',
   paginationLinks: '.entryform td[colspan="4"] > a',
@@ -58,7 +58,6 @@ async function crawlUrls(url, savedPayload, readCnt) {
   while (payload && cnt < 5 && readCnt < MAX_PAGES) {
     cnt++
     readCnt++;    
-    console.log('readCnt:= ' + readCnt);
     // In case there will be rate limiting on the server
     await Promise.delay(DELAY)
 
@@ -111,8 +110,6 @@ async function crawlUrls(url, savedPayload, readCnt) {
       payload = null
     }
   }
-  
-  console.log(urls);
 
   return {
       urls: urls.map(url => `https://nvsos.gov/sosentitysearch/${url}`),

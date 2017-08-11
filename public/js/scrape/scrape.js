@@ -16,8 +16,6 @@
                 temp.push(urls[j]);
             }
         }
-                
-        console.log(temp);
 
         CORURLS = temp;
 
@@ -109,17 +107,13 @@
                 var urls = response.urls;
                 var readCnt = response.readCnt;
                 var savedPayload = response.payload;
-                
-                console.log(urls.length);
-                console.log(urls);                
+                                         
                 CORURLS.push(urls);           
 
                 SAVEDPAYLOAD = savedPayload;
                 READCNT = readCnt;                
-                    
-                console.log(CORURLS.length);
-                console.log(CORURLS);
-                if (savedPayload != undefined && savedPayload != null && readCnt < 6) {                    
+                
+                if (savedPayload != undefined && savedPayload != null && savedPayload != '') {                    
                     reCallFunc();
                 } else {
                     $('#get_infos').trigger('click');
