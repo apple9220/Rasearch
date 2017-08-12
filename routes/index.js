@@ -29,6 +29,7 @@ keystone.pre('render', middleware.flashMessages);
 
 var URL = 'https://nvsos.gov/sosentitysearch/RACorps.aspx?fsnain=OQ%252fy6HT6QrwXv%252fzlehtQZw%253d%253d&RAName=INCORP+SERVICES%2c+INC.';
 var CORINFOS = [];
+
 // Import Route Controllers
 var routes = {
     views: importRoutes('./views'),
@@ -44,7 +45,7 @@ exports = module.exports = function(app) {
         CORINFOS = [];        
         savedPayload = req.body.savedPayload;
         readCnt = req.body.readCnt;
-        
+
         crawl.crawlUrls(URL, savedPayload, readCnt).then((response) => {
             res.send(JSON.stringify(response));
         }).catch((error) => {
@@ -58,9 +59,9 @@ exports = module.exports = function(app) {
 
         crawl.crawlInfo(url).then((response) => {
             CORINFOS.push(response);
-            res.send(JSON.stringify("Get Info Success"));
-        }).catch((error) => {
-            res.send(JSON.stringify("Scrapping Failed!"));
+            res.send(JSON.stringify("success"));
+        }).catch((error) => {            
+            res.send(JSON.stringify("error"));
         })        
     });    
 
@@ -73,6 +74,19 @@ exports = module.exports = function(app) {
             res.send(JSON.stringify("Scrapping Failed!"));
         })        
     });   
+
+    // Export ERROR
+    app.post('/exportError', function(req, res) {    
+        var errorURLS = req.body.data;    
+        console.log('ErrorURL Length:= ' + errorURLS.length);
+        crawl.exportError(errorURLS).then((response) => {
+            res.send(JSON.stringify("Error Loging Completed!"));
+        }).catch((error) => {
+            res.send(JSON.stringify("Scrapping Failed!"));
+        })        
+    });
+
+    
     // NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
     // app.get('/protected', middleware.requireUser, routes.views.protected);
 };

@@ -16,7 +16,7 @@ const SELECTORS = {
 
 const request = superagent.agent()
 
-async function retry(asyncFn, retries = 5, {
+async function retry(asyncFn, retries = 7, {
   timeout = 1000,
   factor = 1.5,
 } = {}) {
@@ -33,7 +33,7 @@ async function retry(asyncFn, retries = 5, {
     }
     await Promise.delay(timeout * (factor ** tries++))
   }
-
+  
   throw error
 }
 
@@ -56,8 +56,7 @@ async function crawlUrls(url, savedPayload, readCnt) {
     payload = {}
   
   while (payload && cnt < 5 && readCnt < MAX_PAGES) {
-    cnt++
-    readCnt++;    
+
     // In case there will be rate limiting on the server
     await Promise.delay(DELAY)
 
@@ -66,6 +65,9 @@ async function crawlUrls(url, savedPayload, readCnt) {
       .type('form')
       .send(payload)
     )
+
+    cnt++
+    readCnt++;    
 
     const $ = cheerio.load(text)
     const entries = $(SELECTORS.entriesLinks)
@@ -297,6 +299,11 @@ async function exportCSV(infos) {
     await Promise.fromCallback((cb) => fs.writeFile("public/csv/data.csv", csv, cb))
 }
 
+async function exportError(infos) {
+
+    await Promise.fromCallback((cb) => fs.writeFile("public/csv/log.txt", infos, cb))
+}  
+
 async function crawlAndSaveToCSV(url, filepath, pagesLimit) {
   const urls = await crawlUrls(url, pagesLimit)
 
@@ -343,3 +350,4 @@ exports.crawlUrls = crawlUrls
 exports.crawlInfo = crawlInfo
 exports.crawlAndSaveToCSV = crawlAndSaveToCSV
 exports.exportCSV = exportCSV
+exports.exportError = exportError
