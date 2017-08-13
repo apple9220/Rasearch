@@ -101,7 +101,7 @@
             if (isExist) {
                 stopCheckFile();                
             }
-        }, 30000);
+        }, 60000);
     }
 
     function stopCheckFile() {
