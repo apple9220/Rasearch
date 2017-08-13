@@ -97,11 +97,13 @@
     function startCheckFile() {
         myVar = setInterval(function(){    
             var isExist = checkFile();
-            console.log('checking file...');
+            var date = new Date();
+            
+            console.log(date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "=" + 'checking file...');
             if (isExist) {
                 stopCheckFile();                
             }
-        }, 120000);
+        }, 60000);
     }
 
     function stopCheckFile() {
