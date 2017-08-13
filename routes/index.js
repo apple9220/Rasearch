@@ -40,53 +40,19 @@ exports = module.exports = function(app) {
     // Views
     app.get('/', routes.views.index);
 
-    // Scrape URL
-    app.post('/scrapeURLS', function(req, res) {
-        CORINFOS = [];        
-        savedPayload = req.body.savedPayload;
-        readCnt = req.body.readCnt;
-
-        crawl.crawlUrls(URL, savedPayload, readCnt).then((response) => {
-            res.send(JSON.stringify(response));
-        }).catch((error) => {
-            res.send(JSON.stringify("Scrapping Failed!"));
-        })        
+    // Scrape & Export CSV
+    app.post('/scrapeCSV', function(req, res) {        
+        const execFile = require('child_process').execFile;
+        const child = execFile('node', ['./crawl.js'], (error, stdout, stderr) => {
+            if (error) {
+                console.error('stderr', stderr);                
+                throw error;
+            }
+            console.log('stdout', stdout);        
+        });
+        res.send(JSON.stringify('success'));
     });
 
-    // Get Infos
-    app.post('/getInfos', function(req, res) {
-        url = req.body.url;
-
-        crawl.crawlInfo(url).then((response) => {
-            CORINFOS.push(response);
-            res.send(JSON.stringify("success"));
-        }).catch((error) => {            
-            res.send(JSON.stringify("error"));
-        })        
-    });    
-
-    // Export CSV
-    app.post('/exportCSV', function(req, res) {
-        console.log("CORINFOS's Length:= " + CORINFOS.length);
-        crawl.exportCSV(CORINFOS).then((response) => {
-            res.send(JSON.stringify("Scrapping Success!"));
-        }).catch((error) => {
-            res.send(JSON.stringify("Scrapping Failed!"));
-        })        
-    });   
-
-    // Export ERROR
-    app.post('/exportError', function(req, res) {    
-        var errorURLS = req.body.data;    
-        console.log('ErrorURL Length:= ' + errorURLS.length);
-        crawl.exportError(errorURLS).then((response) => {
-            res.send(JSON.stringify("Error Loging Completed!"));
-        }).catch((error) => {
-            res.send(JSON.stringify("Scrapping Failed!"));
-        })        
-    });
-
-    
     // NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
     // app.get('/protected', middleware.requireUser, routes.views.protected);
 };
