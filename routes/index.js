@@ -22,6 +22,8 @@ var keystone = require('keystone');
 var middleware = require('./middleware');
 var importRoutes = keystone.importer(__dirname);
 var crawl = require('../actions/crawl');
+var fs = require('fs');
+var path = require('path'); 
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -53,6 +55,28 @@ exports = module.exports = function(app) {
         res.send(JSON.stringify('success'));
     });
 
+    // Remove File
+    app.post('/removeFile', function(req, res) {        
+        var filePath = req.body.fileName; 
+        fs.unlink(filePath, function(err) {
+            if (err) res.send('Remove File Faild');
+            res.send('Remove File Success');
+        });          
+    });
+
+    // Check File
+    app.post('/checkFile', function(req, res) {        
+        var filePath = req.body.fileName;   
+        
+        fs.stat(path.join(path.resolve('.', 'public/'), filePath), function (err, stat) {
+            if (err == null) {
+                console.log("file already exists"); //only prints console message
+                res.send(JSON.stringify('exist'));                
+            } else {
+                res.send(JSON.stringify('not'));                
+            }
+        });      
+    });
     // NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
     // app.get('/protected', middleware.requireUser, routes.views.protected);
 };
