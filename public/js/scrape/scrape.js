@@ -5,6 +5,8 @@
     var myVar = null;
 
     $('#scrape_csv').on('click', function(evt) {
+        $('#start_time').html('');
+        $('#end_time').html('');
         evt.preventDefault();
         
         if (checkFile()) {
@@ -79,7 +81,9 @@
         });
     }
         
-    function scrapeCSV() {    
+    function scrapeCSV() {
+        var date = new Date();
+        $('#start_time').html("start time:= " + date.getFullYear() + "/" + date.getMonth() + "/" + date.getDay() + "  " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
         $.ajax({
             type: 'post',
             url: '/scrapeCSV',
@@ -112,5 +116,8 @@
         myVar = null;
         $('#scrape_csv').text('Scrape And Export CSV');
         $('#download_csv').show();
+
+        var date = new Date();
+        $('#end_time').html("end time:= " + date.getFullYear() + "/" + date.getMonth() + "/" + date.getDay() + "  " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
     }    
 }(jQuery);
